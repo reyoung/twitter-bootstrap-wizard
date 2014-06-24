@@ -51,42 +51,47 @@ var bootstrapWizardCreate = function(element, options) {
 	};
 
 	this.next = function(e) {
-
-		// If we clicked the last then dont activate this
-		if(element.hasClass('last')) {
-			return false;
-		}
-
-		if($settings.onNext && typeof $settings.onNext === 'function' && $settings.onNext($activeTab, $navigation, obj.nextIndex())===false){
-			return false;
-		}
-
-		// Did we click the last button
-		$index = obj.nextIndex();
-		if($index > obj.navigationLength()) {
-		} else {
-			$navigation.find(baseItemSelector + ':eq('+$index+') a').tab('show');
-		}
+	
+	    // If we clicked the last then dont activate this
+	    if(element.hasClass('last')) {
+	        return false;
+	    }
+	
+	    if($settings.onNext && typeof $settings.onNext === 'function' && $settings.onNext($activeTab, $navigation, obj.nextIndex())===false){
+	        return false;
+	    }
+	
+	    // Did we click the last button
+	    $index = obj.nextIndex();
+	    if($index > obj.navigationLength()) {
+	    } else {
+	        $navigation.find('li:eq('+$index+') a').tab('show');
+	        $activeTab = $navigation.find('li.active', element);
+	        $($settings.previousSelector, element).toggleClass('disabled', (obj.firstIndex() >= obj.currentIndex()));
+	        $($settings.nextSelector, element).toggleClass('disabled', (obj.currentIndex() >= obj.navigationLength()));
+	    }
 	};
 
 	this.previous = function(e) {
-
-		// If we clicked the first then dont activate this
-		if(element.hasClass('first')) {
-			return false;
-		}
-
-		if($settings.onPrevious && typeof $settings.onPrevious === 'function' && $settings.onPrevious($activeTab, $navigation, obj.previousIndex())===false){
-			return false;
-		}
-
-		$index = obj.previousIndex();
-		if($index < 0) {
-		} else {
-			$navigation.find(baseItemSelector + ':eq('+$index+') a').tab('show');
-		}
+	
+	    // If we clicked the first then dont activate this
+	    if(element.hasClass('first')) {
+	        return false;
+	    }
+	
+	    if($settings.onPrevious && typeof $settings.onPrevious === 'function' && $settings.onPrevious($activeTab, $navigation, obj.previousIndex())===false){
+	        return false;
+	    }
+	
+	    $index = obj.previousIndex();
+	    if($index < 0) {
+	    } else {
+	        $navigation.find('li:eq('+$index+') a').tab('show');
+	  	$activeTab = $navigation.find('li.active', element);
+	    	$($settings.previousSelector, element).toggleClass('disabled', (obj.firstIndex() >= obj.currentIndex()));
+	    	$($settings.nextSelector, element).toggleClass('disabled', (obj.currentIndex() >= obj.navigationLength()));
+	    }
 	};
-
 	this.first = function(e) {
 		if($settings.onFirst && typeof $settings.onFirst === 'function' && $settings.onFirst($activeTab, $navigation, obj.firstIndex())===false){
 			return false;
